@@ -1,6 +1,6 @@
 # Immich SuperSearch Plugin
 
-![SuperSearch Screenshot](https://github.com/Immich-Super-Search/Immich-SuperSearch/blob/main/Screenshot.jpg?)
+![SuperSearch Screenshot](https://github.com/Immich-Super-Search/Immich-SuperSearch/blob/main/SuperSearch-Screenshot.jpg)
 
 [Immich](https://github.com/immich-app/immich)  is a wonderful solution for self-hosting your personal photo and video library. But as your collection grows, have you ever wished for more powerful tools to manage it?
 
