@@ -4,10 +4,8 @@
 # This script will create the necessary directory and download the backend files.
 
 echo "Creating directory for Immich SuperSearch..."
-mkdir -p immich-supersearch
+mkdir -p ~/immich-supersearch && cd ~/immich-supersearch
 
-echo "Entering directory..."
-cd immich-supersearch
 
 echo "Downloading backend files..."
 
