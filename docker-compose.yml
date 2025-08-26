@@ -1,0 +1,18 @@
+# Docker Compose configuration for Immich Supersearch sidecar service
+# Add this service to your main Immich docker-compose.yml file.
+
+services:
+  # ... your other immich services (immich-server, postgres, etc.)
+
+  immich-supersearch:
+    container_name: immich_supersearch
+    build: ./immich-supersearch # IMPORTANT: Adjust this path relative to your docker-compose file
+    restart: unless-stopped
+    environment:
+      # IMPORTANT: Use the Docker service name, not an IP address!
+      - IMMICH_URL=http://immich-server:3001
+      # IMPORTANT: User MUST provide their own API key
+      - IMMICH_API_KEY=YOUR_IMMICH_API_KEY_HERE
+    ports:
+      # This makes the sidecar available at http://<your-docker-host-ip>:8080
+      - "8080:8080"

@@ -1,0 +1,13 @@
+{
+  "name": "immich-supersearch-sidecar",
+  "version": "1.0.0",
+  "description": "Backend service for Immich SuperSearch",
+  "main": "supersearch.esm.js",
+  "type": "module",
+  "scripts": {
+    "start": "node supersearch.esm.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
