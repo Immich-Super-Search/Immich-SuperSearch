@@ -2,7 +2,20 @@
 
 ![SuperSearch Screenshot](https://github.com/Immich-Super-Search/Immich-SuperSearch/blob/main/Screenshot.jpg?)
 
-A powerful plugin for [Immich](https://github.com/immich-app/immich) that adds a highly-detailed search interface, allowing you to find photos and videos using criteria not available in the standard search.
+[Immich](https://github.com/immich-app/immich)  is a wonderful solution for self-hosting your personal photo and video library. But as your collection grows, have you ever wished for more powerful tools to manage it?
+
+Have you ever wanted to:
+
+*   Easily find and delete all those tiny, **low-resolution images** cluttering up your timeline?
+*   Hunt down those accidental, **two-second videos** you filmed when you meant to take a selfie?
+*   Quickly identify the **largest files** which eating up your storage space?
+
+The standard search is great for memories, but for library management, you need more power.
+
+**This is where Immich SuperSearch comes in.**
+
+Immich SuperSearch is a plugin that seamlessly integrates a powerful new search interface into Immich, giving you the advanced filtering tools you need to manage your library like a pro. It turns those wishes into a simple, clickable search.
+
 
 This plugin consists of two parts:
 1.  A **Backend Sidecar Service** that runs in Docker alongside Immich.
@@ -35,10 +48,10 @@ This plugin consists of two parts:
 Run the following command on your server in the same directory where your main Immich `docker-compose.yml` file is located. It will download and run an installer script that creates the `immich-supersearch` folder and gets the necessary files.
 
 ```bash
-wget -O - https://raw.githubusercontent.com/nazzal-cloud/immich-supersearch-plugin/main/install.sh | bash
+wget -O - https://raw.githubusercontent.com/Immich-Super-Search/Immich-SuperSearch/refs/heads/main/install.sh | bash
 ```
 
-Next, open your main `docker-compose.yml` file (e.g., `nano docker-compose.yml`) and paste the following service definition at the end of your `services:` block:
+Next, open your main Immich `docker-compose.yml` file (e.g., `nano docker-compose.yml`) and paste the following service definition at the end of your `services:` block, just like other service (e.g., redis, database ..):
 
 ```yaml
   immich-supersearch:
@@ -47,14 +60,18 @@ Next, open your main `docker-compose.yml` file (e.g., `nano docker-compose.yml`)
     restart: unless-stopped
     environment:
       # This should point to your Immich server's container name and port
-      - IMMICH_URL=http://immich-server:3001
+      - IMMICH_URL=http://IMMICH_SERVER:2283
       # Generate an API Key in Immich and paste it here
       - IMMICH_API_KEY=YOUR_IMMICH_API_KEY_HERE
     ports:
       - "8080:8080"
 ```
 
-Now, **generate an API Key** in the Immich web UI (`Administration` -> `API Keys` -> `New API Key`) and paste it into the `IMMICH_API_KEY` field you just added. Save the file.
+Make sure to do the necessary edits:
+* Replace `http://IMMICH_SERVER:2283` with your Immich server URL
+* **Generate an API Key** in the Immich web UI `Account Settings` -> `API Keys` -> `New API Key`
+* Replace `IMMICH_API_KEY` with the generated API Key.
+* Save the file.
 
 Finally, build and start the new service:
 
@@ -66,12 +83,12 @@ The backend is now running! You can check its logs with `docker logs immich_supe
 
 ### Step 2: Frontend Setup (Browser-Side)
 
-1.  **[Click here to install the userscript](https://greasyfork.org/en/scripts/547302-immich-supersearch-integrated-ui-v1-0)**.
+1.  **[Click here to install the userscript](https://greasyfork.org/en/scripts/547302-immich-supersearch)**.
 2.  Your userscript manager (Tampermonkey) will open. Click `Install`.
 3.  **IMPORTANT:** After installing, go to the Tampermonkey Dashboard, find the "Immich SuperSearch" script, and click `Edit`. 
 You **must** change the `@match` lines to point to your Immich URL. Otherwise SuperSearch icon will NOT appear.
 4.  Refresh your Immich page. The SuperSearch icon will appear.
-![UserScript Screenshot](https://greasyfork.s3.us-east-2.amazonaws.com/z3ufmeh7h7ytk4ez56uxec5cpgh7)
+
 ---
 
 ### Note:
