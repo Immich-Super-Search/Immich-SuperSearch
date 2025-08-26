@@ -35,6 +35,7 @@ function extractDims(a){
   return {width,height,size};
 }
 function boolish(v){ if(v===""||v==null)return null; if(typeof v==="boolean")return v; if(typeof v==="string"){const s=v.toLowerCase(); if(s==="true")return true; if(s==="false")return false;} return null; }
+function intInRange(v,lo,hi){ if(v===""||v==null)return null; const n=Number(v); return (Number.isInteger(n)&&n>=lo&&n<=hi)?n:null; }
 function num(v){ if(v===""||v==null)return null; const n=Number(v); return Number.isFinite(n)?n:null; }
 
 const ROUTES={meta:null,large:null};
@@ -91,7 +92,7 @@ async function fetchSearchPageDetected({kind,body,page,pageSize}){
   if(route.mode==="qs"){
     url.searchParams.set("size",String(pageSize));
     url.searchParams.set("page",String(page));
-    const keys=["type","minFileSize","isMotion","isNotInAlbum","isFavorite","takenAfter","takenBefore","withExif","order","albumIds"];
+    const keys=["type","minFileSize","isMotion","isNotInAlbum","isFavorite","rating","takenAfter","takenBefore","withExif","order","albumIds"];
     for(const k of keys){ if(body[k]!==undefined && body[k]!==null){ const v=Array.isArray(body[k])?body[k].join(","):String(body[k]); url.searchParams.set(k,v);} }
     opts={method:route.method,headers:I_HEADERS};
   } else {
@@ -110,6 +111,7 @@ async function fetchSearchPageDetected({kind,body,page,pageSize}){
 function normalizeQuery(q){
   const out=Object.assign({},q||{});
   for(const k of ["isFavorite","isMotion","isNotInAlbum"]){ const v=boolish(out[k]); if(v===null) delete out[k]; else out[k]=v; }
+  const r=intInRange(out.rating,-1,5); if(r===null) delete out.rating; else out.rating=r;
   for(const k of ["limit","minDurationSec","maxDurationSec","minFileSize","maxFileSize","minWidth","maxWidth","minHeight","maxHeight"]){
     const n=num(out[k]); if(n===null) delete out[k]; else out[k]=n;
   }
@@ -188,11 +190,11 @@ app.post("/supersearch/search", async (req,res)=>{
     const limit=Number.isFinite(q.limit)?q.limit:5000;
     const serverBody={
       type:q.type, isMotion:q.isMotion, isFavorite:q.isFavorite, isNotInAlbum:q.isNotInAlbum,
-      takenAfter:q.takenAfter, takenBefore:q.takenBefore,
+      rating:q.rating, takenAfter:q.takenAfter, takenBefore:q.takenBefore,
       withExif:true, order:"desc", size:1000
     };
-    if(Number.isFinite(q.minFileSize)&&q.minFileSize>0) serverBody.minFileSize=q.minFileSize;
-    const preferLarge= Number.isFinite(q.minFileSize)&&q.minFileSize>0;
+//    if(Number.isFinite(q.minFileSize)&&q.minFileSize>0) serverBody.minFileSize=q.minFileSize;
+    const preferLarge= false; //Number.isFinite(q.minFileSize)&&q.minFileSize>0;
 
     const clientQ={
       type:q.type, fileNameStartsWith:q.fileNameStartsWith,
